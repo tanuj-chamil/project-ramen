@@ -1,4 +1,3 @@
-import csv
 from scipy.signal import find_peaks
 
 def detect_peaks(x,y):
