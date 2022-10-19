@@ -1,5 +1,4 @@
 import csv
-from matplotlib import pyplot as plt
 
 def get_data(filename):
     with open(filename) as f:
