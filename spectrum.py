@@ -5,3 +5,4 @@ class Spectrum:
         self.intensity = y
         self.fingerprint = detect_peaks(x,y,threshold=0.20)
     
+#fgnrkrvkrvrkv
