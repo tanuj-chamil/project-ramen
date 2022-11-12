@@ -130,3 +130,5 @@ dmypy.json
 
 pdf/
 .vscode/settings.json
+
+databases/csv/0.py
