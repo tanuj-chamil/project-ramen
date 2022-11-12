@@ -1,8 +1,9 @@
 from scipy.signal import find_peaks
 
-def detect_peaks(x,y):
-    peaks = find_peaks(y,prominence=1)
-
+def detect_peaks(x,y,threshold=0):
+    max_peak = max(y)
+    peaks = find_peaks(y,prominence=1,height = max(y)*threshold)
+    
     x_peaks = [x[i] for i in peaks[0]]
     y_peaks = [y[i] for i in peaks[0]]
 

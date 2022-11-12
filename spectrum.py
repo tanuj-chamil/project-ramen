@@ -3,5 +3,5 @@ class Spectrum:
     def __init__(self,x,y) -> None:
         self.wavenlength = x
         self.intensity = y
-        self.fingerprint = detect_peaks(self.wavenlength,self.intensity)
+        self.fingerprint = detect_peaks(x,y)
     
