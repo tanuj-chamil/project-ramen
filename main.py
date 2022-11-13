@@ -1,12 +1,15 @@
 import spectrum as s
-import csv_read
 import matplotlib.pyplot as plt
+import pandas as pd
+from random import randint as r
 
-file_path = "databases\\csv\\adenine.csv"
-data = csv_read.get_data(file_path)
+file_path = "databases\\csv\\chitin.csv"
+data = pd.read_csv(file_path)
 
-molecule =  s.Spectrum(*data)
+molecule =  s.Spectrum('adenine', data['L'], data['I'])
 
-plt.plot(molecule.wavenlength,molecule.intensity)
-plt.plot(*molecule.fingerprint,"vr")
-plt.show()
+
+
+molecule.correct_baseline(polyoder=6)
+molecule.plot().show()
+print(molecule.fingerprint)
