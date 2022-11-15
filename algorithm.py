@@ -13,5 +13,5 @@ def mod_polyfit(x,y, order=4, iterations=100):
     return new_fit
 
 def find_peaks(intensities):
-    peak_indices = fp(intensities,prominence=5)
+    peak_indices = fp(intensities,prominence=0.02)
     return peak_indices
