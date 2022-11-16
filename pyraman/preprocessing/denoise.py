@@ -9,12 +9,12 @@ def moving_average(spectrum,window=3):
     return spectrum
 
 #salvitzky golay
-def salvitzky_golay(spectrum,order=1,window=7):
+def salvitzky_golay_smooth(spectrum,order=1,window=7):
     spectrum.intensity = savgol_filter(spectrum.intensity,polyorder=order,window_length=window)
     return spectrum
 
 #lowess
-def lowess(spectrum,order=1,fraction=0.05):
+def lowess_smooth(spectrum,order=1,fraction=0.05):
     spectrum.intensity = lowess(spectrum.intensity,spectrum.shift,fraction=fraction,return_sorted=False)
     return spectrum
 
