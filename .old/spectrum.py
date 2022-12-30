@@ -76,6 +76,31 @@ class Spectrum:
         self.intensity = self.intensity/max_intensity
         self.fingerprint = self.generate_fingerprint()
         return self
+    
+    def vector_normalize(self,method):
+        """normalizes spectrum in range 0 to 1
+
+        Inputs for method:
+            1 ==> 1st Norm
+            2 ==> 2nd Norm
+            3 ==> Infinity Norm
+        Returns:
+            Spectrum: Vector normalized spectrum
+        """
+
+        match method:
+            case 1:
+                sum_intensity = self.intensity.sum()
+                self.intensity = self.intensity/sum_intensity
+            case 2:
+                square_sum_intensity = np.square(list(self.intensity)).sum()
+                self.intensity = self.intensity/square_sum_intensity
+            case 3:
+                max_intensity = self.intensity.max()
+                self.intensity = self.intensity/max_intensity
+
+        self.fingerprint = self.generate_fingerprint()
+        return self
 
     def generate_fingerprint(self):
         peak_indices = find_peaks(self.intensity)[0]
