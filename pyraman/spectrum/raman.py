@@ -14,6 +14,7 @@ class RamanSpectrum:
         self.intensity = self.raw_intensity
         self.name = name
         self.fingerprint = "Normalize to generate the spectral fingerprint"
+        self.processing_history = []
 
     def plot(self):
         """_summary_
