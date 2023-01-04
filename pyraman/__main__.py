@@ -2,9 +2,10 @@ from spectrum.raman import RamanSpectrum as rs
 from preprocessing import baseline
 import pandas as pd
 from random import randint as r
-
+import numpy as np
 import matplotlib.pyplot as plt
 import scienceplots
+
 plt.style.use(['science','bright'])
 plt.rcParams.update({'figure.dpi': '300', 'lines.linewidth' : 0.6})
 plt.rcParams.update({'figure.max_open_warning': 0})
@@ -28,14 +29,30 @@ def plot(spectrum,filename,baseline=False):
     plt.savefig(filename+'.pdf')
     return
 
-compound = "cellulose"
+def tempplot(spectrum,filename,baseline=False):
+    plt.figure(figsize=(3, 2))
+    plt.plot(spectrum.shift,spectrum.raw_intensity)
+    if baseline : plt.plot(spectrum.shift,spectrum.baseline)
+    plt.ylabel("Intensity")
+    plt.xlabel("Shift (cm$^{-1}$)")
+    plt.gca().axes.get_yaxis().set_visible(False)
+    plt.gca().axes.get_xaxis().set_visible(False)
+    plt.show()
+    return
+
+compound = "glycerol"
 file_path = "pyraman\\resources\\databases\\csv\\{}.csv".format(compound)
 data = pd.read_csv(file_path)
+molecule =  rs(compound, data['L'], data['I'])
+tempplot(molecule)
 
-for i in range(1,11):
-    for j in [1,2,5,10,20,50,100,200]:
-        molecule =  rs(compound, data['L'], data['I'])
-        molecule = baseline.mod_polyfit(molecule,order=i, iterations = j)
-        plot(molecule,"C:\\Users\\Tanuj\\Desktop\\figures\\{}-{}-{}".format(compound,100+i,1000+j),baseline=True)
+noise = np.random.normal(0,1,len(molecule.shift))
+
+
+# for i in range(1,11):
+#     for j in [1,2,5,10,20,50,100,200]:
+#         molecule =  rs(compound, data['L'], data['I'])
+#         molecule = baseline.mod_polyfit(molecule,order=i, iterations = j)
+#         plot(molecule,"C:\\Users\\Tanuj\\Desktop\\figures\\{}-{}-{}".format(compound,100+i,1000+j),baseline=True)
 
 
