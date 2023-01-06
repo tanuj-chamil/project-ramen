@@ -6,17 +6,17 @@ from statsmodels.nonparametric.smoothers_lowess import lowess
 def moving_average(spectrum,window=3):
     c = np.ones[window]
     spectrum.intensity = np.convolve(spectrum.intensity, c, 'valid')
-    spectrum.processing_history.append ['denoise-moving_average-window-{}'.format(window)]
+    spectrum.processing_history.append ('denoise-moving_average-window-{}'.format(window))
     return spectrum
 
 #salvitzky golay
 def salvitzky_golay_smooth(spectrum,order=1,window=7):
     spectrum.intensity = savgol_filter(spectrum.intensity,polyorder=order,window_length=window)
-    spectrum.processing_history.append ['denoise-salvitzky_golay_smooth-order-{}-window-{}'.format(order,window)]
+    spectrum.processing_history.append ('denoise-salvitzky_golay_smooth-order-{}-window-{}'.format(order,window))
     return spectrum
 
 #lowess
-def lowess_smooth(spectrum,order=1,window=0.05):
-    spectrum.intensity = lowess(spectrum.intensity,spectrum.shift,fraction=window/len(spectrum.shift),return_sorted=False)
-    spectrum.processing_history.append ['denoise-lowess_smooth-order-{}-window-{}'.format(order,window)]
+def lowess_smooth(spectrum,order=1,window=5):
+    spectrum.intensity = lowess(spectrum.intensity,spectrum.shift,frac=window/len(spectrum.shift),return_sorted=False)
+    spectrum.processing_history.append ('denoise-lowess_smooth-order-{}-window-{}'.format(order,window))
     return spectrum

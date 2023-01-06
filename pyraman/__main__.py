@@ -1,5 +1,6 @@
 from spectrum.raman import RamanSpectrum as rs
 from preprocessing import baseline
+from preprocessing import denoise
 import pandas as pd
 from random import randint as r
 import numpy as np
@@ -20,7 +21,7 @@ def save_to_csv(spectrum,file_path):
 
 def plot(spectrum,filename,baseline=False):
     plt.figure(figsize=(3, 2))
-    plt.plot(spectrum.shift,spectrum.raw_intensity)
+    plt.plot(spectrum.shift,spectrum.intensity)
     if baseline : plt.plot(spectrum.shift,spectrum.baseline)
     plt.ylabel("Intensity")
     plt.xlabel("Shift (cm$^{-1}$)")
@@ -29,30 +30,37 @@ def plot(spectrum,filename,baseline=False):
     plt.savefig(filename+'.pdf')
     return
 
-def tempplot(spectrum,filename,baseline=False):
+def tempplot(spectrum):
     plt.figure(figsize=(3, 2))
-    plt.plot(spectrum.shift,spectrum.raw_intensity)
-    if baseline : plt.plot(spectrum.shift,spectrum.baseline)
+    plt.plot(spectrum.shift,spectrum.intensity)
     plt.ylabel("Intensity")
     plt.xlabel("Shift (cm$^{-1}$)")
-    plt.gca().axes.get_yaxis().set_visible(False)
-    plt.gca().axes.get_xaxis().set_visible(False)
     plt.show()
     return
 
-compound = "glycerol"
+compound = "riboflavin"
 file_path = "pyraman\\resources\\databases\\csv\\{}.csv".format(compound)
 data = pd.read_csv(file_path)
 molecule =  rs(compound, data['L'], data['I'])
-tempplot(molecule)
+
 
 noise = np.random.normal(0,1,len(molecule.shift))
 
+molecule =  rs(compound, data['L'], data['I'])
+molecule.intensity += noise
+tempplot(molecule)
 
-# for i in range(1,11):
-#     for j in [1,2,5,10,20,50,100,200]:
+molecule  = denoise.salvitzky_golay_smooth(molecule,window=25,order=4)
+molecule  = baseline.mod_polyfit(molecule,order=6)
+molecule.intensity = molecule.intensity/molecule.intensity.max()
+tempplot(molecule)
+
+
+# for i in range(1,5):
+#     for j in [5,7,11,15,19,23,25]:
 #         molecule =  rs(compound, data['L'], data['I'])
-#         molecule = baseline.mod_polyfit(molecule,order=i, iterations = j)
-#         plot(molecule,"C:\\Users\\Tanuj\\Desktop\\figures\\{}-{}-{}".format(compound,100+i,1000+j),baseline=True)
+#         molecule.intensity += noise
+#         molecule  = denoise.lowess_smooth(molecule,window=j,order=i)
+#         plot(molecule,"C:\\Users\\Tanuj\\Desktop\\figures\\lowess-{}-{}".format(compound,100+i,1000+j))
 
 
